@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Heraldry Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+  <style>
+    #display {
+      height: 420px;
+      width: 320px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="title is-1">Heraldry Generator</h1>
+  <div id="app">
+    <button v-on:click="generateArms" class="button is-large is-primary">Generate</button>
+    <div id="display" class="has-text-centered">
+      <img :src="deviceSource" class="image is-320x420">
+    </div>
+    <div id="blazon" class="content is-large">
+      <p class="has-text-centered is-italic">{{ blazon }}</p>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
+<script>
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    blazon: '',
+    deviceSource: ''
+  },
+  methods: {
+    generateArms: function (event) {
+      id = getRandomInt(1000000)
+      url = 'https://heraldry-api.ironarachne.com/'
+      this.deviceSource = url + 'device/' + id
+      fetch(url + 'blazon/' + id)
+      .then(response => response.json())
+      .then(response => {
+        this.blazon = response.blazon;
+      })
+      .catch(error => console.error(error));
+    }
+  }
+})
+
+app.generateArms()
+</script>
+</body>
+</html>
