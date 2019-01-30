@@ -43,12 +43,16 @@ var app = new Vue({
       url = 'https://heraldry-api.ironarachne.com/'
       this.deviceSource = url + 'device/' + id
       fetch(url + 'blazon/' + id)
-      .then(response => response.json())
-      .then(response => {
-        this.blazon = response.blazon;
+      .then(function(response) {
+        return response.text();
+      })
+      .then(function(text) {
+        console.log(text);
+        app.blazon = text;
       })
       .catch(error => console.error(error));
     }
+
   }
 })
 
